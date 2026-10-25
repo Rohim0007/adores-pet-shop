@@ -1,5 +1,5 @@
 /* =====================================================
-   ADORE'S PET - CHECKOUT.JS
+   ADORE'S PET - CHECKOUT.JS (Complete & Verified)
 ===================================================== */
 
 function submitOrderForm(e){
@@ -33,16 +33,30 @@ function submitOrderForm(e){
                 price: price,
                 qty: item.qty
             });
-            if(p.category === "Rabbit" || p.category === "Hamster") hasLivePet = true;
+            
+            const cat = (p.category || '').toLowerCase();
+            if(cat.includes('rabbit') || cat.includes('hamster')){
+                hasLivePet = true;
+            }
         }
     });
 
     let delivery = 80;
-    if(district === "Gazipur" || district === "Narayanganj") delivery = 120;
-    else if(district !== "Dhaka") delivery = 150;
+    if(district === "Gazipur" || district === "Narayanganj" || district === "Chattogram" || district === "Sylhet" || district === "Rajshahi" || district === "Khulna" || district === "Barishal" || district === "Rangpur" || district === "Mymensingh") {
+        delivery = 120;
+    } else if(district !== "Dhaka" && district !== "") {
+        delivery = 150;
+    }
 
     const total = subtotal + delivery;
     const advance = hasLivePet ? Math.round(total * 0.5) : 0;
+
+    // লাইভ এনিমেল থাকলে ট্রানজেকশন আইডি বাধ্যতামূলক করার ভ্যালিডেশন লজিক
+    if(hasLivePet && (!trxId || trxId === "")){
+        alert("⚠️ আপনার কার্টে লাইভ এনিমেল (খরগোশ/হ্যামস্টার) রয়েছে!\n\nঅনুগ্রহ করে বিকাশ/নগদে ৫০% টাকা (৳" + advance + ") অ্যাডভান্স করে আপনার ট্রানজেকশন আইডি (TrxID) নির্দিষ্ট ঘরে দিন, তারপর অর্ডার কনফার্ম করুন।");
+        document.getElementById("trxIdInput").focus();
+        return;
+    }
 
     const orderObj = {
         orderId: "AP-" + Math.floor(100000 + Math.random() * 900000),
