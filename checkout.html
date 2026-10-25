@@ -26,17 +26,111 @@
             <label style="font-size:12.5px; font-weight:700; color:#475569;">মোবাইল নম্বর (Phone Number) *</label>
             <input type="tel" id="customerPhone" placeholder="যেমন: 017xxxxxxxx" class="form-input" required>
 
-            <label style="font-size:12.5px; font-weight:700; color:#475569;">সম্পূর্ণ ঠিকানা (Delivery Address) *</label>
-            <textarea id="customerAddress" placeholder="রোড, থানা..." class="form-input" style="height:60px;" required></textarea>
+            <label style="font-size:12.5px; font-weight:700; color:#475569;">সম্পূর্ণ ঠিকানা (Delivery Address / রোড, থানা, এলাকা) *</label>
+            <textarea id="customerAddress" placeholder="আপনার এলাকার নাম ও ঠিকানা লিখুন..." class="form-input" style="height:60px;" required></textarea>
 
-            <label style="font-size:12.5px; font-weight:700; color:#475569;">জেলা নির্বাচন করুন (Select District) *</label>
+            <label style="font-size:12.5px; font-weight:700; color:#475569;">আপনার জেলা নির্বাচন করুন (Select District) *</label>
             <select id="deliveryDistrict" class="form-input" onchange="updateCheckoutTotal()" required>
-                <option value="Dhaka">ঢাকা (Inside Dhaka - ৳৮০)</option>
-                <option value="Gazipur">গাজীপুর / নারায়নগঞ্জ (Suburbs - ৳১২০)</option>
-                <option value="Outside">অন্যান্য জেলা (Outside Dhaka - ৳১৫০)</option>
+                <option value="">-- জেলা বেছে নিন --</option>
+                
+                <!-- ঢাকা বিভাগ -->
+                <optgroup label="ঢাকা বিভাগ">
+                    <option value="Dhaka">ঢাকা (৳৮০)</option>
+                    <option value="Gazipur">গাজীপুর (৳১২০)</option>
+                    <option value="Narayanganj">নারায়ণগঞ্জ (৳১২০)</option>
+                    <option value="Narsingdi">নরসিংদী (৳১৫০)</option>
+                    <option value="Manikganj">মানিকগঞ্জ (৳১৫০)</option>
+                    <option value="Munshiganj">মুন্সিগঞ্জ (৳১৫০)</option>
+                    <option value="Tangail">টাঙ্গাইল (৳১৫০)</option>
+                    <option value="Kishoreganj">কিশোরগঞ্জ (৳১৫০)</option>
+                    <option value="Faridpur">ফরিদপুর (৳১৫০)</option>
+                    <option value="Madaripur">মাদারীপুর (৳১৫০)</option>
+                    <option value="Gopalganj">গোপালগঞ্জ (৳১৫০)</option>
+                    <option value="Rajbari">রাজবাড়ী (৳১৫০)</option>
+                    <option value="Shariatpur">শরীয়তপুর (৳১৫০)</option>
+                </optgroup>
+
+                <!-- চট্টগ্রাম বিভাগ -->
+                <optgroup label="চট্টগ্রাম বিভাগ">
+                    <option value="Chattogram">চট্টগ্রাম (৳১২০)</option>
+                    <option value="CoxsBazar">কক্সবাজার (৳১৫০)</option>
+                    <option value="Cumilla">কুমিল্লা (৳১৫০)</option>
+                    <option value="Brahmanbaria">ব্রাহ্মণবাড়িয়া (৳১৫০)</option>
+                    <option value="Chandpur">চাঁদপুর (৳১৫০)</option>
+                    <option value="Noakhali">নোয়াখালী (৳১৫০)</option>
+                    <option value="Feni">ফেনী (৳১৫০)</option>
+                    <option value="Lakshmipur">লক্ষ্মীপুর (৳১৫০)</option>
+                    <option value="Khagrachhari">খাগড়াছড়ি (৳১৫০)</option>
+                    <option value="Bandarban">বান্দরবান (৳১৫০)</option>
+                    <option value="Rangamati">রাঙ্গামাটি (৳১৫০)</option>
+                </optgroup>
+
+                <!-- রাজশাহী বিভাগ -->
+                <optgroup label="রাজশাহী বিভাগ">
+                    <option value="Rajshahi">রাজশাহী (৳১২০)</option>
+                    <option value="Bogra">বগুড়া (৳১৫০)</option>
+                    <option value="Pabna">পাবনা (৳১৫০)</option>
+                    <option value="Sirajganj">সিরাজগঞ্জ (৳১৫০)</option>
+                    <option value="Natore">নাটোর (৳১৫০)</option>
+                    <option value="Naogaon">নওগাঁ (৳১৫০)</option>
+                    <option value="Chapainawabganj">চাঁপাইনবাবগঞ্জ (৳১৫০)</option>
+                    <option value="Joypurhat">জয়পুরহাট (৳১৫০)</option>
+                </optgroup>
+
+                <!-- খুলনা বিভাগ -->
+                <optgroup label="খুলনা বিভাগ">
+                    <option value="Khulna">খুলনা (৳১২০)</option>
+                    <option value="Jessore">যশোর (৳১৫০)</option>
+                    <option value="Satkhira">সাতক্ষীরা (৳১৫০)</option>
+                    <option value="Kushtia">কুষ্টিয়া (৳১৫০)</option>
+                    <option value="Jhenaidah">ঝিনাইদহ (৳১৫০)</option>
+                    <option value="Magura">মাগুরা (৳১৫০)</option>
+                    <option value="Narail">নড়াইল (৳১৫০)</option>
+                    <option value="Bagerhat">বাগেরহাট (৳১৫০)</option>
+                    <option value="Chuadanga">চুয়াডাঙ্গা (৳১৫০)</option>
+                    <option value="Meherpur">মেহেরপুর (৳১৫০)</option>
+                </optgroup>
+
+                <!-- সিলেট বিভাগ -->
+                <optgroup label="সিলেট বিভাগ">
+                    <option value="Sylhet">সিলেট (৳১২০)</option>
+                    <option value="Moulvibazar">মৌলভীবাজার (৳১৫০)</option>
+                    <option value="Habiganj">হবিগঞ্জ (৳১৫০)</option>
+                    <option value="Sunamganj">সুনামগঞ্জ (৳১৫০)</option>
+                </optgroup>
+
+                <!-- বরিশাল বিভাগ -->
+                <optgroup label="বরিশাল বিভাগ">
+                    <option value="Barishal">বরিশাল (৳১২০)</option>
+                    <option value="Patuakhali">পটুয়াখালী (৳১৫০)</option>
+                    <option value="Bhola">ভোলা (৳১৫০)</option>
+                    <option value="Pirojpur">পিরোজপুর (৳১৫০)</option>
+                    <option value="Jhalokati">ঝালকাঠি (৳১৫০)</option>
+                    <option value="Barguna">বরগুনা (৳১৫০)</option>
+                </optgroup>
+
+                <!-- রংপুর বিভাগ -->
+                <optgroup label="রংপুর বিভাগ">
+                    <option value="Rangpur">রংপুর (৳১২০)</option>
+                    <option value="Dinajpur">দিনাজপুর (৳১৫০)</option>
+                    <option value="Gaibandha">গাইবান্ধা (৳১৫০)</option>
+                    <option value="Kurigram">কুড়িগ্রাম (৳১৫০)</option>
+                    <option value="Lalmonirhat">লালমনিরহাট (৳১৫০)</option>
+                    <option value="Nilphamari">নীলফামারী (৳১৫০)</option>
+                    <option value="Panchagarh">পঞ্চগড় (৳১৫০)</option>
+                    <option value="Thakurgaon">ঠাকুরগাঁও (৳১৫০)</option>
+                </optgroup>
+
+                <!-- ময়মনসিংহ বিভাগ -->
+                <optgroup label="ময়মনসিংহ বিভাগ">
+                    <option value="Mymensingh">ময়মনসিংহ (৳১২০)</option>
+                    <option value="Jamalpur">জামালপুর (৳১৫০)</option>
+                    <option value="Sherpur">শেরপুর (৳১৫০)</option>
+                    <option value="Netrokona">নেত্রকোণা (৳১৫০)</option>
+                </optgroup>
             </select>
 
-            <label style="font-size:12.5px; font-weight:700; color:#475569;">বিকাশ/নগদ ট্রানজেকশন আইডি (TrxID - ঐচ্ছিক)</label>
+            <label style="font-size:12.5px; font-weight:700; color:#475569; margin-top:10px; display:block;">বিকাশ/নগদ ট্রানজেকশন আইডি (TrxID - ঐচ্ছিক)</label>
             <input type="text" id="trxIdInput" placeholder="যেমন: 9J87H6G5F4" class="form-input">
 
             <!-- ORDER SUMMARY BOX -->
@@ -68,7 +162,7 @@
 <script src="shop.js"></script>
 <script src="checkout.js"></script>
 <script>
-// জেলা অনুযায়ী ডেলিভারি খরচ হিসাব করার লজিক
+// জেলা অনুযায়ী ডেলিভারি খরচ অটো হিসাব করার ফাংশন
 function updateCheckoutTotal(){
     let subtotal = 0;
     cart.forEach(item => {
@@ -80,10 +174,14 @@ function updateCheckoutTotal(){
     });
     
     const district = document.getElementById("deliveryDistrict").value;
-    let delivery = 80;
-    if(district === "Gazipur") delivery = 120;
-    else if(district === "Outside") delivery = 150;
+    let delivery = 80; // ডিফল্ট ঢাকা
     
+    if(district === "Gazipur" || district === "Narayanganj" || district === "Chattogram" || district === "Rajshahi" || district === "Khulna" || district === "Sylhet" || district === "Barishal" || district === "Rangpur" || district === "Mymensingh") {
+        delivery = 120; // বিভাগীয় শহর ও প্রধান সাবুবার্ব
+    } else if(district !== "") {
+        delivery = 150; // অন্যান্য জেলা
+    }
+
     const total = subtotal + delivery;
 
     document.getElementById("checkoutSubtotalText").innerText = subtotal;
