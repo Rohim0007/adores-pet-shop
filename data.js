@@ -1,62 +1,83 @@
 /* =====================================================
-   ADORE'S PET - DATA.JS (Default Products Data)
+   ADORE'S PET - DATA.JS (Default Products & Config)
 ===================================================== */
 
-const defaultProducts = [
+let products = [
     {
-        id: "1",
-        name: "Flemish Giant Rabbit",
-        price: 2500,
-        discountPrice: 2200,
+        id: "p1",
+        name: "Asian Flemish Giant Rabbit (বিশুদ্ধ ফ্লেমিশ জায়ান্ট খরগোশ)",
+        price: 3500,
+        discountPrice: 3200,
         stock: 5,
-        age: "2 Months",
-        color: "Gray",
         category: "Rabbit",
-        rating: "4.9",
-        desc: "উন্নত জাতের বিগ সাইজ ফ্লেমিশ জায়ান্ট খরগোশ। সম্পূর্ণ সুস্থ ও ভ্যাকসিনেশন সম্পন্ন।",
-        images: ["https://i.postimg.cc/CdyZqRY5/file-000000006ecc71f899e85a5cc31b0405.png"],
-        videoUrl: ""
+        image: "https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=500"
     },
     {
-        id: "2",
-        name: "Syrian Hamster Pair",
-        price: 800,
-        discountPrice: 700,
-        stock: 8,
-        age: "1.5 Months",
-        color: "Golden Brown",
+        id: "p2",
+        name: "Pure Breed French Lop Rabbit (ফ্রেঞ্চ লপ খরগোশ)",
+        price: 4000,
+        discountPrice: 3800,
+        stock: 4,
+        category: "Rabbit",
+        image: "https://images.unsplash.com/photo-1535294435445-d7249524ef2e?w=500"
+    },
+    {
+        id: "p3",
+        name: "Cute Netherland Dwarf Bunny (নেদারল্যান্ড ডোয়ার্ফ খরগোশ)",
+        price: 2800,
+        discountPrice: 2500,
+        stock: 6,
+        category: "Rabbit",
+        image: "https://images.unsplash.com/photo-1591380315053-48995574c69d?w=500"
+    },
+    {
+        id: "p4",
+        name: "Syrian Hamster (সাইরিয়ান হ্যামস্টার)",
+        price: 600,
+        discountPrice: 500,
+        stock: 10,
         category: "Hamster",
-        rating: "4.8",
-        desc: "খুবই কিউট এবং প্লেফুল সিরিয়ান হ্যামস্টার জোড়া। ঘরোয়া পরিবেশে বড় করা।",
-        images: ["https://i.postimg.cc/CdyZqRY5/file-000000006ecc71f899e85a5cc31b0405.png"],
-        videoUrl: ""
+        image: "https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=500"
     },
     {
-        id: "3",
-        name: "Premium Hamster Food Mix (500g)",
-        price: 350,
-        discountPrice: null,
-        stock: 20,
-        age: "",
-        color: "",
+        id: "p5",
+        name: "Campbell Dwarf Hamster (ক্যাম্পবেল ডোয়ার্ফ হ্যামস্টার)",
+        price: 700,
+        discountPrice: 600,
+        stock: 8,
+        category: "Hamster",
+        image: "https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=500"
+    },
+    {
+        id: "p6",
+        name: "Premium Hamster Food Mix 500g (প্রিমিয়াম হ্যামস্টার ফুড)",
+        price: 250,
+        discountPrice: 220,
+        stock: 25,
         category: "Pet Food",
-        rating: "5.0",
-        desc: "হ্যামস্টারের জন্য পুষ্টিকর ও সুষম খাবার মিক্সচার। বীজ, বাদাম ও প্রোটিন সমৃদ্ধ।",
-        images: ["https://i.postimg.cc/CdyZqRY5/file-000000006ecc71f899e85a5cc31b0405.png"],
-        videoUrl: ""
+        image: "https://images.unsplash.com/photo-1535930891776-0c2dfb7fda1a?w=500"
     },
     {
-        id: "4",
-        name: "Rabbit Nipple Water Drinker (125ml)",
-        price: 150,
-        discountPrice: 120,
-        stock: 15,
-        age: "",
-        color: "Red",
+        id: "p7",
+        name: "Rabbit Nipple Drinker Set (খরগোশের অটো পানির ফিডার)",
+        price: 180,
+        discountPrice: 150,
+        stock: 30,
         category: "Accessories",
-        rating: "4.7",
-        desc: "লিক-প্রুফ অটোমেটিক নিপল ড্রিঙ্কার। খাঁচায় সহজেই সেট করা যায়।",
-        images: ["https://i.postimg.cc/CdyZqRY5/file-000000006ecc71f899e85a5cc31b0405.png"],
-        videoUrl: ""
+        image: "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?w=500"
     }
 ];
+
+// ব্রাউজারের লোকাল স্টোরেজে ডেটা সিঙ্ক করার ফাংশন
+if (!localStorage.getItem("adore_products")) {
+    localStorage.setItem("adore_products", JSON.stringify(products));
+} else {
+    try {
+        const storedProducts = JSON.parse(localStorage.getItem("adore_products"));
+        if (storedProducts && storedProducts.length > 0) {
+            products = storedProducts;
+        }
+    } catch (e) {
+        console.error("Data parse error", e);
+    }
+}
