@@ -13,14 +13,15 @@
 <!-- TOP HEADER -->
 <div class="top-header">
     <div class="top-header-inner">
-        <div class="brand-box" onclick="handleSecretClick()" style="cursor:pointer;" title="Admin Secret Click">
+        <div class="brand-box">
             <img src="https://i.postimg.cc/CdyZqRY5/file-000000006ecc71f899e85a5cc31b0405.png" alt="Logo">
             <div>
                 <h1>ADORE'S PET</h1>
                 <p>Loved by pets, trusted by owners</p>
             </div>
         </div>
-        <button class="live-site-btn" onclick="openSupportModal()"><i class="fa-solid fa-headset"></i> Support</button>
+        <!-- লাইভ সাইট বাটন (এটিতে ৫ বার ক্লিক করলে অ্যাডমিন প্যানেল খুলবে) -->
+        <button class="live-site-btn" onclick="handleSecretClick()" title="Admin Panel">Live Site</button>
     </div>
     
     <!-- SEARCH BAR -->
@@ -32,9 +33,17 @@
     </div>
 </div>
 
+<!-- DISCOUNT NOTICE BANNER -->
+<div class="discount-notice-banner">
+    <div class="discount-notice-box">
+        <i class="fa-solid fa-bullhorn" style="font-size: 18px;"></i>
+        <div id="dynamicDiscountNoticeText">10% Discount Every Product</div>
+    </div>
+</div>
+
 <!-- ANNOUNCEMENT & YOUTUBE BANNER -->
-<div id="announcementBannerBox" style="display:none; background:linear-gradient(135deg, #00897b, #00695c); color:#fff; padding:10px 16px; text-align:center; font-size:13px; font-weight:700; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
-    <div id="announcementText"></div>
+<div id="announcementBannerBox" style="display:none; max-width:600px; margin:10px auto 0; padding:0 16px;">
+    <div id="announcementText" style="background:linear-gradient(135deg, #00897b, #00695c); color:#fff; padding:10px 16px; border-radius:12px; text-align:center; font-size:13px; font-weight:700;"></div>
 </div>
 
 <!-- HERO BANNER -->
@@ -191,8 +200,12 @@
     <div class="thankyou-card" style="text-align:center; max-width:350px;">
         <div style="width:60px; height:60px; background:#e0f2f1; color:var(--teal); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 12px;"><i class="fa-solid fa-headset"></i></div>
         <h2 style="font-size:18px; font-weight:900; color:#1e293b; margin-bottom:6px;">Customer Support</h2>
-        <p style="font-size:13px; color:#64748b; margin-bottom:15px;">যেকোনো প্রয়োজনে আমাদের কল করুন।</p>
-        <a href="tel:01681578599" style="display:block; background:var(--teal); color:#fff; text-decoration:none; padding:10px; border-radius:10px; font-weight:800; font-size:14px; margin-bottom:8px;"><i class="fa-solid fa-phone"></i> Call: 01681578599</a>
+        <p style="font-size:13px; color:#64748b; margin-bottom:15px;">যেকোনো প্রয়োজনে আমাদের সাথে যোগাযোগ করুন।</p>
+        
+        <a href="tel:01681578599" style="display:block; background:#00897b; color:#fff; text-decoration:none; padding:10px; border-radius:10px; font-weight:800; font-size:13.5px; margin-bottom:8px;"><i class="fa-solid fa-phone"></i> Call: 01681578599</a>
+        <a href="https://wa.me/8801681578599" target="_blank" style="display:block; background:#25d366; color:#fff; text-decoration:none; padding:10px; border-radius:10px; font-weight:800; font-size:13.5px; margin-bottom:8px;"><i class="fa-brands fa-whatsapp"></i> WhatsApp Chat</a>
+        <a href="https://facebook.com/adorespet" target="_blank" style="display:block; background:#1877f2; color:#fff; text-decoration:none; padding:10px; border-radius:10px; font-weight:800; font-size:13.5px; margin-bottom:12px;"><i class="fa-brands fa-facebook"></i> Facebook Page</a>
+        
         <button onclick="closeSupportModal()" class="admin-submit-btn" style="background:#64748b;">বন্ধ করুন</button>
     </div>
 </div>
@@ -203,7 +216,7 @@
         <div class="thankyou-icon" style="width:60px; height:60px; background:#e6f4ea; color:#10b981; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 15px;"><i class="fa-solid fa-circle-check"></i></div>
         <h2 style="font-size:18px; color:#1e293b; margin-bottom:8px;">সফল!</h2>
         <p id="customAlertMessage" style="font-size:13.5px; color:#64748b; line-height:1.5; margin-bottom:20px;"></p>
-        <button onclick="closeCustomAlert()" class="admin-submit-btn" style="background:var(--teal);">ঠিক আছে</button>
+        <button onclick="closeCustomAlert()" class="admin-submit-btn" style="background:(var(--teal);">ঠিক আছে</button>
     </div>
 </div>
 
@@ -245,5 +258,34 @@
 <script src="cart.js"></script>
 <script src="orders.js"></script>
 <script src="shop.js"></script>
+<script>
+// ৫ বার ক্লিক করলে অ্যাডমিন প্যানেল খোলার সিক্রেট লজিক
+let liveSiteClicks = 0;
+function handleSecretClick(){
+    liveSiteClicks++;
+    if(liveSiteClicks === 5){
+        liveSiteClicks = 0;
+        openAdminLoginModal();
+    }
+    setTimeout(() => { liveSiteClicks = 0; }, 1500);
+}
+
+// নোটিশ টেক্সট ডায়নামিক রেন্ডার করার ফাংশন
+function renderDiscountNotice(){
+    const noticeText = StorageManager.get(APP_CONSTANTS.STORAGE_KEYS.NOTICE_TEXT, "");
+    const bannerBox = document.querySelector(".discount-notice-banner");
+    const textEl = document.getElementById("dynamicDiscountNoticeText");
+    if(textEl && bannerBox){
+        if(noticeText && noticeText.trim() !== ""){
+            textEl.innerText = noticeText;
+            bannerBox.style.display = "block";
+        } else {
+            textEl.innerText = "10% Discount Every Product";
+            bannerBox.style.display = "block";
+        }
+    }
+}
+renderDiscountNotice();
+</script>
 </body>
 </html>
