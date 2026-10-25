@@ -1,79 +1,94 @@
 /* =====================================================
-   ADORE'S PET - ORDERS.JS (Orders & Voucher Management)
+   ADORE'S PET - ORDERS.JS (Complete & Bug-Free)
 ===================================================== */
 
 function openOrdersModal(){
-    const container = document.getElementById("userOrdersList");
-    if(!container) return;
-
-    let hasAdminCancelled = false;
-
-    if(myOrders.length === 0){
-        container.innerHTML = `<p style="text-align:center; color:#64748b;">কোনো অর্ডার নেই।</p>`;
-    } else {
-        container.innerHTML = myOrders.map((o, idx) => {
-            const isPending = !o.status || o.status === 'pending';
-            const isCancelled = o.status === 'cancelled';
-
-            if(isCancelled && o.cancelledByAdmin){
-                hasAdminCancelled = true;
-            }
-
-            return `
-                <div class="order-card" style="${isCancelled ? 'border-color:#fca5a5; background:#fff5f5;' : ''}">
-                    <div class="order-card-header"><span>${o.id}</span><span>${formatCurrency(o.total)}</span></div>
-                    <div style="font-size:12px; margin-bottom:8px;">${o.itemsText.replace(/\n/g, '<br>')}</div>
-                    
-                    ${isCancelled && o.cancelledByAdmin ? `
-                        <div style="background:#fef2f2; border:1px dashed #f87171; color:#991b1b; padding:8px 10px; border-radius:8px; font-size:11.5px; font-weight:700; margin-bottom:10px; line-height:1.4;">
-                            ⚠️ দুঃখিত! প্রোডাক্টটি স্টকে না থাকায় অর্ডারটি বাতিল করা হয়েছে।
-                        </div>
-                    ` : ''}
-
-                    <div style="display:flex; gap:8px; align-items:center;">
-                        <button onclick="openVoucher(${idx})" style="background:var(--teal); color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px; flex:1;">ভাউচার দেখুন</button>
-                        ${isPending ? `<button onclick="cancelMyOrder('${o.id}')" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer; font-size:12px;">অর্ডার বাতিল করুন</button>` : `<span style="font-size:11px; font-weight:800; color:${o.status==='completed'?'#10b981':'#ef4444'};">${o.status.toUpperCase()}</span>`}
-                    </div>
-                </div>
-            `;
-        }).join("");
-    }
-
-    document.getElementById("ordersModal")?.classList.add("show");
-
-    if(hasAdminCancelled){
-        setTimeout(() => {
-            if(typeof showCustomAlert === "function"){
-                showCustomAlert("আপনার অর্ডারকৃত পণ্যটি বর্তমানে স্টকে না থাকায় বাতিল করা হয়েছে। অনিচ্ছাকৃত ভুলের জন্য আমরা আন্তরিকভাবে দুঃখিত! 😔");
-            }
-        }, 300);
-    }
+    renderUserOrders();
+    const modal = document.getElementById("ordersModal");
+    if(modal) modal.classList.add("show");
 }
 
-function cancelMyOrder(orderId){
-    let idx = myOrders.findIndex(o => o.id === orderId);
-    if(idx !== -1){
-        myOrders[idx].status = 'cancelled';
-        myOrders[idx].cancelledByAdmin = false;
-        saveMyOrders();
-        openOrdersModal();
-        if(typeof showCustomAlert === "function") showCustomAlert("আপনার অর্ডারটি সফলভাবে বাতিল করা হয়েছে।");
-    }
+function closeOrdersModal(){
+    const modal = document.getElementById("ordersModal");
+    if(modal) modal.classList.remove("show");
 }
 
-function closeOrdersModal(){ document.getElementById("ordersModal")?.classList.remove("show"); }
+function renderUserOrders(){
+    const listContainer = document.getElementById("userOrdersList");
+    if(!listContainer) return;
 
-function openVoucher(idx){
-    const o = myOrders[idx];
-    if(!o) return;
+    const orders = StorageManager.get(APP_CONSTANTS.STORAGE_KEYS.ORDERS, []);
+    listContainer.innerHTML = "";
+
+    if(orders.length === 0){
+        listContainer.innerHTML = `<p style="text-align:center; color:#64748b; padding:20px;">আপনার কোনো অর্ডার নেই।</p>`;
+        return;
+    }
+
+    orders.forEach(ord => {
+        const div = document.createElement("div");
+        div.style.cssText = "background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-bottom:12px;";
+        div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span style="font-size:12.5px; font-weight:900; color:#00897b;">${ord.orderId}</span>
+                <span style="font-size:11px; font-weight:700; background:#e0f2fe; color:#0284c7; padding:2px 8px; border-radius:6px;">${ord.status || 'Pending'}</span>
+            </div>
+            <div style="font-size:12px; color:#475569; margin-bottom:6px;">
+                তারিখ: ${ord.date}<br>
+                গ্রাহক: ${ord.customerName} (${ord.customerPhone})<br>
+                ঠিকানা: ${ord.address}
+            </div>
+            <div style="font-size:12px; font-weight:800; color:#1e293b; border-top:1px dashed #cbd5e1; padding-top:6px; display:flex; justify-content:space-between;">
+                <span>সর্বমোট: ৳${ord.total} ${ord.advancePaid ? `(অ্যাডভান্স: ৳${ord.advancePaid})` : ''}</span>
+                <button onclick="viewVoucher('${ord.orderId}')" style="background:#00897b; color:#fff; border:none; padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer;">ভাউচার দেখুন</button>
+            </div>
+        `;
+        listContainer.appendChild(div);
+    });
+}
+
+function viewVoucher(orderId){
+    const orders = StorageManager.get(APP_CONSTANTS.STORAGE_KEYS.ORDERS, []);
+    const ord = orders.find(x => x.orderId === orderId);
+    if(!ord) return;
+
     const custInfo = document.getElementById("voucherCustomerInfo");
-    const tableBody = document.getElementById("voucherTableBody");
+    const tbody = document.getElementById("voucherTableBody");
     const totalsBox = document.getElementById("voucherTotalsBox");
-    
-    if(custInfo) custInfo.innerHTML = `<strong>ID:</strong> ${o.id}<br><strong>Name:</strong> ${escapeHTML(o.name)}<br><strong>Phone:</strong> ${escapeHTML(o.phone)}<br><strong>Address:</strong> ${escapeHTML(o.address)}<br><strong>TrxID:</strong> ${escapeHTML(o.trxId)}`;
-    if(tableBody) tableBody.innerHTML = o.tableHtml;
-    if(totalsBox) totalsBox.innerHTML = `Subtotal: ${formatCurrency(o.subtotal)}<br>Delivery: ${formatCurrency(o.delivery)}<br><strong>Total: ${formatCurrency(o.total)}</strong>`;
-    
-    document.getElementById("voucherModal")?.classList.add("show");
+
+    if(custInfo){
+        custInfo.innerHTML = `<b>অর্ডার আইডি:</b> ${ord.orderId}<br><b>তারিখ:</b> ${ord.date}<br><b>নাম:</b> ${ord.customerName}<br><b>ফোন:</b> ${ord.customerPhone}<br><b>ঠিকানা:</b> ${ord.address}<br><b>TrxID:</b> ${ord.trxId || 'N/A'}`;
+    }
+
+    if(tbody){
+        tbody.innerHTML = "";
+        ord.items.forEach(it => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td style="padding:6px; border-bottom:1px solid #f1f5f9;">${it.name}</td><td style="padding:6px; border-bottom:1px solid #f1f5f9;">${it.qty}</td><td style="padding:6px; border-bottom:1px solid #f1f5f9;">৳${it.price * it.qty}</td>`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    if(totalsBox){
+        totalsBox.innerHTML = `পণ্যের মূল্য: ৳${ord.subtotal}<br>ডেলিভারি চার্জ: ৳${ord.delivery}<br><span style="color:#00897b; font-size:14px;">সর্বমোট প্রদেয়: ৳${ord.total}</span>${ord.advancePaid ? `<br><span style="color:#b45309;">৫০% অগ্রিম পরিশোধিত/প্রদেয়: ৳${ord.advancePaid}</span>` : ''}`;
+    }
+
+    closeOrdersModal();
+    const vModal = document.getElementById("voucherModal");
+    if(vModal) vModal.classList.add("show");
 }
-function closeVoucherModal(){ document.getElementById("voucherModal")?.classList.remove("show"); }
+
+function closeVoucherModal(){
+    const vModal = document.getElementById("voucherModal");
+    if(vModal) vModal.classList.remove("show");
+}
+
+function trackMyOrderFromSuccess(){
+    closeThankYouModal();
+    openOrdersModal();
+}
+
+function closeThankYouModal(){
+    const m = document.getElementById("thankyouModal");
+    if(m) m.classList.remove("show");
+}
