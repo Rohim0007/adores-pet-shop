@@ -1,5 +1,5 @@
 /* =====================================================
-   ADORE'S PET - ORDERS.JS (Complete & Bug-Free)
+   ADORE'S PET - ORDERS.JS (Complete & Verified)
 ===================================================== */
 
 function openOrdersModal(){
@@ -38,9 +38,9 @@ function renderUserOrders(){
                 গ্রাহক: ${ord.customerName} (${ord.customerPhone})<br>
                 ঠিকানা: ${ord.address}
             </div>
-            <div style="font-size:12px; font-weight:800; color:#1e293b; border-top:1px dashed #cbd5e1; padding-top:6px; display:flex; justify-content:space-between;">
+            <div style="font-size:12px; font-weight:800; color:#1e293b; border-top:1px dashed #cbd5e1; padding-top:6px; display:flex; justify-content:space-between; align-items:center;">
                 <span>সর্বমোট: ৳${ord.total} ${ord.advancePaid ? `(অ্যাডভান্স: ৳${ord.advancePaid})` : ''}</span>
-                <button onclick="viewVoucher('${ord.orderId}')" style="background:#00897b; color:#fff; border:none; padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer;">ভাউচার দেখুন</button>
+                <button onclick="viewVoucher('${ord.orderId}')" style="background:#00897b; color:#fff; border:none; padding:6px 12px; border-radius:8px; font-size:11.5px; font-weight:700; cursor:pointer;">ভাউচার দেখুন</button>
             </div>
         `;
         listContainer.appendChild(div);
@@ -50,32 +50,57 @@ function renderUserOrders(){
 function viewVoucher(orderId){
     const orders = StorageManager.get(APP_CONSTANTS.STORAGE_KEYS.ORDERS, []);
     const ord = orders.find(x => x.orderId === orderId);
-    if(!ord) return;
+    if(!ord) {
+        alert("ভাউচার পাওয়া যায়নি!");
+        return;
+    }
 
     const custInfo = document.getElementById("voucherCustomerInfo");
     const tbody = document.getElementById("voucherTableBody");
     const totalsBox = document.getElementById("voucherTotalsBox");
 
     if(custInfo){
-        custInfo.innerHTML = `<b>অর্ডার আইডি:</b> ${ord.orderId}<br><b>তারিখ:</b> ${ord.date}<br><b>নাম:</b> ${ord.customerName}<br><b>ফোন:</b> ${ord.customerPhone}<br><b>ঠিকানা:</b> ${ord.address}<br><b>TrxID:</b> ${ord.trxId || 'N/A'}`;
+        custInfo.innerHTML = `
+            <b>Order ID:</b> ${ord.orderId}<br>
+            <b>Date:</b> ${ord.date}<br>
+            <b>Name:</b> ${ord.customerName}<br>
+            <b>Phone:</b> ${ord.customerPhone}<br>
+            <b>Address:</b> ${ord.address}<br>
+            <b>TrxID:</b> ${ord.trxId || 'N/A'}
+        `;
     }
 
     if(tbody){
         tbody.innerHTML = "";
         ord.items.forEach(it => {
             const tr = document.createElement("tr");
-            tr.innerHTML = `<td style="padding:6px; border-bottom:1px solid #f1f5f9;">${it.name}</td><td style="padding:6px; border-bottom:1px solid #f1f5f9;">${it.qty}</td><td style="padding:6px; border-bottom:1px solid #f1f5f9;">৳${it.price * it.qty}</td>`;
+            tr.innerHTML = `
+                <td style="padding:8px; border-bottom:1px solid #f1f5f9; font-size:12.5px;">${it.name}</td>
+                <td style="padding:8px; border-bottom:1px solid #f1f5f9; font-size:12.5px; text-align:center;">${it.qty}</td>
+                <td style="padding:8px; border-bottom:1px solid #f1f5f9; font-size:12.5px; text-align:right;">৳${it.price * it.qty}</td>
+            `;
             tbody.appendChild(tr);
         });
     }
 
     if(totalsBox){
-        totalsBox.innerHTML = `পণ্যের মূল্য: ৳${ord.subtotal}<br>ডেলিভারি চার্জ: ৳${ord.delivery}<br><span style="color:#00897b; font-size:14px;">সর্বমোট প্রদেয়: ৳${ord.total}</span>${ord.advancePaid ? `<br><span style="color:#b45309;">৫০% অগ্রিম পরিশোধিত/প্রদেয়: ৳${ord.advancePaid}</span>` : ''}`;
+        totalsBox.innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Subtotal:</span> <b>৳${ord.subtotal}</b></div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>Delivery Charge:</span> <b>৳${ord.delivery}</b></div>
+            <div style="display:flex; justify-content:space-between; border-top:1px dashed #cbd5e1; padding-top:6px; font-weight:900; color:#00897b; font-size:14px;">
+                <span>Total:</span> <span>৳${ord.total}</span>
+            </div>
+            ${ord.advancePaid ? `<div style="display:flex; justify-content:space-between; margin-top:4px; color:#b45309; font-weight:800;"><span>5% Advance Paid:</span> <span>৳${ord.advancePaid}</span></div>` : ''}
+        `;
     }
 
     closeOrdersModal();
     const vModal = document.getElementById("voucherModal");
-    if(vModal) vModal.classList.add("show");
+    if(vModal) {
+        vModal.classList.add("show");
+    } else {
+        alert("ভাউচার মডাল টেমপ্লেট পাওয়া যায়নি!");
+    }
 }
 
 function closeVoucherModal(){
