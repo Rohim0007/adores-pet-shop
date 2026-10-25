@@ -1,5 +1,5 @@
 /* =====================================================
-   ADORE'S PET - DATA.JS (Default Products & Config)
+   ADORE'S PET - DATA.JS
 ===================================================== */
 
 let products = [
@@ -68,16 +68,15 @@ let products = [
     }
 ];
 
-// ব্রাউজারের লোকাল স্টোরেজে ডেটা সিঙ্ক করার ফাংশন
 if (!localStorage.getItem("adore_products")) {
     localStorage.setItem("adore_products", JSON.stringify(products));
 } else {
     try {
-        const storedProducts = JSON.parse(localStorage.getItem("adore_products"));
-        if (storedProducts && storedProducts.length > 0) {
-            products = storedProducts;
+        const stored = JSON.parse(localStorage.getItem("adore_products"));
+        if (stored && stored.length > 0) {
+            products = stored;
         }
     } catch (e) {
-        console.error("Data parse error", e);
+        console.error("Error loading products", e);
     }
 }
