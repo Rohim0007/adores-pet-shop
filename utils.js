@@ -1,31 +1,16 @@
 /* =====================================================
-   ADORE'S PET - UTILS.JS (Helper Functions)
+   ADORE'S PET - UTILS.JS
 ===================================================== */
 
-// HTML সিকিউরিটির জন্য এস্কেপ ফাংশন
-function escapeHTML(str) {
-    if (!str) return "";
-    return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+// কাস্টম অ্যালার্ট বা সফলতার পপআপ দেখানোর ফাংশন
+function showCustomAlert(message) {
+    const modal = document.getElementById("customAlertModal");
+    const msgEl = document.getElementById("customAlertMessage");
+    if(msgEl) msgEl.innerText = message;
+    if(modal) modal.classList.add("show");
 }
 
-// টাকার অংক ফরম্যাট করা (যেমন: ৳1,500)
-function formatCurrency(amount) {
-    const num = Number(amount) || 0;
-    return "৳" + num.toLocaleString("bn-BD");
-}
-
-// তারিখ ফরম্যাট করার সুবিধা
-function formatDate(dateString) {
-    if (!dateString) return "N/A";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("bn-BD", {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-    });
+function closeCustomAlert() {
+    const modal = document.getElementById("customAlertModal");
+    if(modal) modal.classList.remove("show");
 }
