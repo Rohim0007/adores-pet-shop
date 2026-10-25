@@ -13,13 +13,14 @@
 <!-- TOP HEADER -->
 <div class="top-header">
     <div class="top-header-inner">
-        <div class="brand-box">
-            <img src="https://i.postimg.cc/CdyZqRY5/file-000000006ecc71f899e85a5cc31b0405.png" alt="Logo">
+        <!-- লোগো: এখানে ক্লিক করলে সরাসরি হোমপেজে চলে যাবে -->
+        <a href="index.html" class="brand-box" style="text-decoration:none; color:inherit;">
+            <img src="https://i.postimg.cc/NKBF1tbS/20261008-191945.png" alt="Logo">
             <div>
                 <h1>ADORE'S PET</h1>
                 <p>Loved by pets, trusted by owners</p>
             </div>
-        </div>
+        </a>
         <!-- লাইভ সাইট বাটন (এটিতে ৫ বার ক্লিক করলে অ্যাডমিন প্যানেল খুলবে) -->
         <button class="live-site-btn" onclick="handleSecretClick()" title="Admin Panel">Live Site</button>
     </div>
@@ -38,15 +39,10 @@
     <div id="announcementText" style="background:linear-gradient(135deg, #00897b, #00695c); color:#fff; padding:10px 16px; border-radius:12px; text-align:center; font-size:13px; font-weight:700;"></div>
 </div>
 
-<!-- HERO BANNER -->
+<!-- HERO BANNER: এখানে আপনার দেওয়া নতুন ব্যানার লিংক যুক্ত করা হয়েছে (এটি শুধু ডিসপ্লে হবে, ক্লিক করলে কোথাও যাবে না) -->
 <div class="hero-slider" style="margin-top: 12px;">
-    <div class="hero-slide active">
-        <img src="https://i.postimg.cc/CdyZqRY5/file-000000006ecc71f899e85a5cc31b0405.png" alt="Banner">
-        <div class="hero-content">
-            <span class="badge">🐾 আপনার প্রিয় পোষা প্রাণীর বিশ্বস্ত ঠিকানা 🐾</span>
-            <h2>Rabbit | Hamster | Pet Food | Accessories</h2>
-            <button class="hero-cta" onclick="document.getElementById('productsGrid').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-cart-shopping"></i> Shop Now ></button>
-        </div>
+    <div class="hero-slide active" style="cursor: default;">
+        <img src="https://i.postimg.cc/Hrw5g3Pk/file-000000004a4482438eebd37b7fd9db5f.png" alt="Banner" style="width:100%; height:auto; display:block; object-fit:contain; background:#000;">
     </div>
 </div>
 
