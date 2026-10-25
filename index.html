@@ -33,21 +33,13 @@
     </div>
 </div>
 
-<!-- DISCOUNT NOTICE BANNER -->
-<div class="discount-notice-banner">
-    <div class="discount-notice-box">
-        <i class="fa-solid fa-bullhorn" style="font-size: 18px;"></i>
-        <div id="dynamicDiscountNoticeText">10% Discount Every Product</div>
-    </div>
-</div>
-
-<!-- ANNOUNCEMENT & YOUTUBE BANNER -->
+<!-- DYNAMIC ANNOUNCEMENT BANNER (Only shows if set by admin) -->
 <div id="announcementBannerBox" style="display:none; max-width:600px; margin:10px auto 0; padding:0 16px;">
     <div id="announcementText" style="background:linear-gradient(135deg, #00897b, #00695c); color:#fff; padding:10px 16px; border-radius:12px; text-align:center; font-size:13px; font-weight:700;"></div>
 </div>
 
 <!-- HERO BANNER -->
-<div class="hero-slider">
+<div class="hero-slider" style="margin-top: 12px;">
     <div class="hero-slide active">
         <img src="https://i.postimg.cc/CdyZqRY5/file-000000006ecc71f899e85a5cc31b0405.png" alt="Banner">
         <div class="hero-content">
@@ -260,7 +252,7 @@
 <script src="orders.js"></script>
 <script src="shop.js"></script>
 <script>
-// "Live Site" বাটনে ঠিক ৫ বার ক্লিক করলে অ্যাডমিন প্যানেল খোলার ফুলপ্রুফ লজিক
+// "Live Site" বাটনে ঠিক ৫ বার ক্লিক করলে অ্যাডমিন প্যানেল খোলার লজিক
 let liveSiteClicks = 0;
 let lastClickTime = 0;
 function handleSecretClick(){
@@ -278,18 +270,17 @@ function handleSecretClick(){
     }
 }
 
-// নোটিশ টেক্সট ডায়নামিক রেন্ডার করার ফাংশন
+// নোটিশ টেক্সট ডায়নামিক রেন্ডার করার ফাংশন (ফাঁকা থাকলে ব্যানার হাইড থাকবে)
 function renderDiscountNotice(){
     const noticeText = StorageManager.get(APP_CONSTANTS.STORAGE_KEYS.NOTICE_TEXT, "");
-    const bannerBox = document.querySelector(".discount-notice-banner");
-    const textEl = document.getElementById("dynamicDiscountNoticeText");
+    const bannerBox = document.getElementById("announcementBannerBox");
+    const textEl = document.getElementById("announcementText");
     if(textEl && bannerBox){
         if(noticeText && noticeText.trim() !== ""){
             textEl.innerText = noticeText;
             bannerBox.style.display = "block";
         } else {
-            textEl.innerText = "10% Discount Every Product";
-            bannerBox.style.display = "block";
+            bannerBox.style.display = "none";
         }
     }
 }
