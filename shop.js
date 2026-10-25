@@ -1,5 +1,5 @@
 /* =====================================================
-   ADORE'S PET - SHOP.JS (Complete, Fixed & Optimized)
+   ADORE'S PET - SHOP.JS
 ===================================================== */
 
 let cart = StorageManager.get(APP_CONSTANTS.STORAGE_KEYS.CART, []);
@@ -27,7 +27,6 @@ function renderShopProducts(filterCat = 'All', searchQuery = ''){
     if(!container) return;
 
     container.innerHTML = "";
-
     let filtered = products;
 
     if(filterCat !== 'All'){
@@ -53,7 +52,7 @@ function renderShopProducts(filterCat = 'All', searchQuery = ''){
         card.innerHTML = `
             <div>
                 <div style="position:relative; width:100%; height:130px; border-radius:8px; overflow:hidden; background:#f1f5f9; margin-bottom:8px;">
-                    <img src="${p.image || (p.images && p.images[0]) || ''}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='https://via.placeholder.com/300'">
+                    <img src="${p.image || ''}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='https://via.placeholder.com/300'">
                     ${hasDiscount ? `<span style="position:absolute; top:6px; left:6px; background:#ef4444; color:#fff; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">ছাড়</span>` : ''}
                 </div>
                 <h4 style="font-size:13px; font-weight:800; color:#1e293b; margin-bottom:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${p.name}</h4>
@@ -81,31 +80,23 @@ function searchProducts(input){
 
 function addToCart(productId){
     const p = products.find(x => String(x.id) === String(productId));
-    if(!p){
-        alert("প্রোডাক্ট পাওয়া যায়নি!");
-        return;
-    }
-
+    if(!p) return;
     if(p.stock <= 0){
-        alert("দুঃখিত, প্রোডাক্টটি বর্তমানে স্টকআউট!");
+        alert("স্টকআউট!");
         return;
     }
 
     const existing = cart.find(x => String(x.id) === String(productId));
     if(existing){
-        if(existing.qty < p.stock){
-            existing.qty++;
-        } else {
-            alert("স্টকে আর প্রোডাক্ট নেই!");
-            return;
-        }
+        if(existing.qty < p.stock) existing.qty++;
+        else { alert("স্টক শেষ!"); return; }
     } else {
         cart.push({ id: p.id, qty: 1 });
     }
 
     saveCart();
     updateCartCount();
-    alert("প্রোডাক্টটি কার্টে যোগ করা হয়েছে! ✅");
+    alert("প্রোডাক্ট কার্টে যোগ করা হয়েছে! ✅");
 }
 
 function saveCart(){
@@ -184,7 +175,6 @@ function changeQty(productId, delta){
             cart = cart.filter(x => String(x.id) !== String(productId));
         } else if(item.qty > p.stock){
             item.qty = p.stock;
-            alert("স্টক সীমিত!");
         }
         saveCart();
         updateCartCount();
@@ -201,12 +191,13 @@ function removeFromCart(productId){
 
 function proceedToCheckout(){
     if(!cart || cart.length === 0){
-        alert("আপনার কার্ট খালি রয়েছে!");
+        alert("কার্ট খালি!");
         return;
     }
     window.location.href = "checkout.html";
 }
 
+// লোগোতে ৫ বার ক্লিক করলে অ্যাডমিন প্যানেল ওপেন হওয়ার সিক্রেট ট্রিগার
 function setupAdminTrigger(){
     let clickCount = 0;
     const brand = document.querySelector(".brand-box");
