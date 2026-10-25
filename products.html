@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products Management - ADORE'S PET</title>
+<link rel="stylesheet" href="Admin.css">
+</head>
+<body>
+<div style="max-width:600px; margin:20px auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 style="color:#00897b;">Product Inventory</h2>
+        <a href="admin.html" style="background:#64748b; color:#fff; padding:6px 12px; border-radius:8px; text-decoration:none; font-size:12px; font-weight:700;">ড্যাশবোর্ড</a>
+    </div>
+    <div class="admin-card">
+        <div id="productInventoryList"></div>
+    </div>
+</div>
+<script src="utils.js"></script>
+<script src="constants.js"></script>
+<script src="storage.js"></script>
+<script src="data.js"></script>
+<script>
+const listContainer = document.getElementById("productInventoryList");
+let prods = StorageManager.get(APP_CONSTANTS.STORAGE_KEYS.PRODUCTS, defaultProducts);
+
+function renderInventory(){
+    if(prods.length === 0){ listContainer.innerHTML = "কোনো পণ্য নেই।"; return; }
+    listContainer.innerHTML = prods.map(p => `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f1f5f9;">
+            <div>
+                <b>${escapeHTML(p.name)}</b><br>
+                <span style="font-size:12px; color:#64748b;">৳${p.price} | Stock: ${p.stock}</span>
+            </div>
+            <span style="font-size:11px; background:#e0f2f1; color:#00897b; padding:4px 8px; border-radius:6px; font-weight:700;">${p.category}</span>
+        </div>
+    `).join("");
+}
+renderInventory();
+</script>
+</body>
+</html>
