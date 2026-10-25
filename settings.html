@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings - ADORE'S PET</title>
+<link rel="stylesheet" href="Admin.css">
+</head>
+<body>
+<div style="max-width:500px; margin:40px auto; text-align:center;">
+    <h2 style="color:#00897b; margin-bottom:20px;">Settings & Configurations</h2>
+    <div class="admin-card" style="text-align:left;">
+        <h3>অ্যাডমিন পাসওয়ার্ড পরিবর্তন</h3>
+        <p style="font-size:12px; color:#64748b; margin-bottom:10px;">নিরাপত্তার জন্য পাসওয়ার্ড আপডেট করুন।</p>
+        <input type="password" id="setNewPass" placeholder="New Password" class="form-input">
+        <button onclick="updateSettingsPass()" class="admin-submit-btn">সেভ করুন</button>
+    </div>
+    <br>
+    <a href="admin.html" style="color:#00897b; font-weight:bold; text-decoration:none;">← অ্যাডমিন ড্যাশবোর্ডে ফিরে যান</a>
+</div>
+<script src="utils.js"></script>
+<script src="config.js"></script>
+<script src="storage.js"></script>
+<script>
+function updateSettingsPass(){
+    const p = document.getElementById("setNewPass").value.trim();
+    if(!p){ alert("পাসওয়ার্ড লিখুন"); return; }
+    StorageManager.set("adoresAdminPass", p);
+    alert("সফলভাবে পাসওয়ার্ড আপডেট করা হয়েছে!");
+    document.getElementById("setNewPass").value = "";
+}
+</script>
+</body>
+</html>
