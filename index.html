@@ -20,7 +20,7 @@
                 <p>Loved by pets, trusted by owners</p>
             </div>
         </div>
-        <!-- লাইভ সাইট বাটন (এটিতে 연속 ৫ বার ক্লিক করলে অ্যাডমিন প্যানেল খুলবে) -->
+        <!-- লাইভ সাইট বাটন (এটিতে ৫ বার ক্লিক করলে অ্যাডমিন প্যানেল খুলবে) -->
         <button class="live-site-btn" onclick="handleSecretClick()" title="Admin Panel">Live Site</button>
     </div>
     
@@ -195,7 +195,7 @@
     </div>
 </div>
 
-<!-- SUPPORT MODAL (WhatsApp & Facebook Links Added) -->
+<!-- SUPPORT MODAL -->
 <div id="supportModal" class="thankyou-overlay">
     <div class="thankyou-card" style="text-align:center; max-width:350px;">
         <div style="width:60px; height:60px; background:#e0f2f1; color:var(--teal); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 12px;"><i class="fa-solid fa-headset"></i></div>
@@ -249,7 +249,7 @@
     </div>
 </div>
 
-<!-- Modular Scripts (checkout.js added) -->
+<!-- Modular Scripts -->
 <script src="utils.js"></script>
 <script src="constants.js"></script>
 <script src="config.js"></script>
@@ -260,15 +260,22 @@
 <script src="orders.js"></script>
 <script src="shop.js"></script>
 <script>
-// "Live Site" বাটনে ঠিক ৫ বার ক্লিক করলে অ্যাডমিন প্যানেল খোলার লজিক
+// "Live Site" বাটনে ঠিক ৫ বার ক্লিক করলে অ্যাডমিন প্যানেল খোলার ফুলপ্রুফ লজিক
 let liveSiteClicks = 0;
+let lastClickTime = 0;
 function handleSecretClick(){
-    liveSiteClicks++;
+    const currentTime = new Date().getTime();
+    if (currentTime - lastClickTime > 2000) {
+        liveSiteClicks = 1;
+    } else {
+        liveSiteClicks++;
+    }
+    lastClickTime = currentTime;
+
     if(liveSiteClicks === 5){
         liveSiteClicks = 0;
         openAdminLoginModal();
     }
-    setTimeout(() => { liveSiteClicks = 0; }, 1500);
 }
 
 // নোটিশ টেক্সট ডায়নামিক রেন্ডার করার ফাংশন
