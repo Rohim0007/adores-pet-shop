@@ -27,12 +27,13 @@
             <input type="tel" id="customerPhone" placeholder="যেমন: 017xxxxxxxx" class="form-input" required>
 
             <label style="font-size:12.5px; font-weight:700; color:#475569;">সম্পূর্ণ ঠিকানা (Delivery Address) *</label>
-            <textarea id="customerAddress" placeholder="রোড, থানা, জেলা..." class="form-input" style="height:70px;" required></textarea>
+            <textarea id="customerAddress" placeholder="রোড, থানা..." class="form-input" style="height:60px;" required></textarea>
 
-            <label style="font-size:12.5px; font-weight:700; color:#475569;">ডেলিভারি এলাকা (Delivery Area)</label>
-            <select id="deliveryMethod" class="form-input" onchange="updateCheckoutTotal()">
-                <option value="Inside Dhaka">ঢাকার ভিতরে (Inside Dhaka - ৳৮০)</option>
-                <option value="Outside Dhaka">ঢাকার বাইরে (Outside Dhaka - ৳১৫০)</option>
+            <label style="font-size:12.5px; font-weight:700; color:#475569;">জেলা নির্বাচন করুন (Select District) *</label>
+            <select id="deliveryDistrict" class="form-input" onchange="updateCheckoutTotal()" required>
+                <option value="Dhaka">ঢাকা (Inside Dhaka - ৳৮০)</option>
+                <option value="Gazipur">গাজীপুর / নারায়নগঞ্জ (Suburbs - ৳১২০)</option>
+                <option value="Outside">অন্যান্য জেলা (Outside Dhaka - ৳১৫০)</option>
             </select>
 
             <label style="font-size:12.5px; font-weight:700; color:#475569;">বিকাশ/নগদ ট্রানজেকশন আইডি (TrxID - ঐচ্ছিক)</label>
@@ -67,7 +68,7 @@
 <script src="shop.js"></script>
 <script src="checkout.js"></script>
 <script>
-// পেজ লোড হলে সাবটোটাল ও মোট টাকা ক্যালকুলেট করার ফাংশন
+// জেলা অনুযায়ী ডেলিভারি খরচ হিসাব করার লজিক
 function updateCheckoutTotal(){
     let subtotal = 0;
     cart.forEach(item => {
@@ -77,8 +78,12 @@ function updateCheckoutTotal(){
             subtotal += price * item.qty;
         }
     });
-    const method = document.getElementById("deliveryMethod").value;
-    const delivery = method === "Inside Dhaka" ? 80 : 150;
+    
+    const district = document.getElementById("deliveryDistrict").value;
+    let delivery = 80;
+    if(district === "Gazipur") delivery = 120;
+    else if(district === "Outside") delivery = 150;
+    
     const total = subtotal + delivery;
 
     document.getElementById("checkoutSubtotalText").innerText = subtotal;
