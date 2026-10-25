@@ -1,0 +1,23 @@
+/* =====================================================
+   ADORE'S PET - GLOBAL.CSS (Theme & Global Variables)
+===================================================== */
+
+:root {
+    --primary-teal: #00897b;
+    --primary-dark: #00695c;
+    --accent-orange: #f59e0b;
+    --danger-red: #ef4444;
+    --success-green: #10b981;
+    --bg-main: #f8fafc;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-light: #e2e8f0;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
