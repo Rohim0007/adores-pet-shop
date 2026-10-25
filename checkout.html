@@ -17,7 +17,7 @@
         <h2 style="font-size:17px; color:#00897b; font-weight:900;">Checkout (অর্ডার কনফার্ম করুন)</h2>
     </div>
 
-    <!-- CHECKOUT FORM CARD -->
+    <!-- CHECKOUT FORM CARD (সবকিছু এখন এই ফর্ম কার্ডের ভেতরে থাকবে) -->
     <div style="background:#fff; border-radius:16px; padding:20px; border:1px solid #e2e8f0; box-shadow:0 4px 12px rgba(0,0,0,0.03);">
         <form onsubmit="submitOrderForm(event)">
             <label style="font-size:12.5px; font-weight:700; color:#475569;">আপনার নাম (Full Name) *</label>
@@ -138,18 +138,18 @@
                 </div>
             </div>
 
-            <!-- ডায়নামিক বিকাশ ও নগদ ৫০% অ্যাডভান্স বক্স (শুধু খরগোশ/হ্যামস্টার কার্টে থাকলেই শো করবে) -->
+            <!-- বিকাশ ও নগদ পার্সোনাল নম্বর বক্স (এটি এখন ট্রানজেকশন আইডির ঠিক উপরে ফর্মের ভেতর সুন্দরভাবে থাকবে) -->
             <div id="advancePaymentBox" style="display:none; background:#e0f2f1; border:1px dashed #00897b; padding:12px; border-radius:10px; margin:12px 0; text-align:center;">
                 <div style="font-weight:800; font-size:12.5px; color:#00695c;">
                     <i class="fa-solid fa-wallet"></i> bKash / Nagad Personal Number:
                 </div>
-                <div style="font-size:16.5px; font-weight:900; color:#00897b; margin:3px 0;">01681578599</div>
+                <div style="font-size:17px; font-weight:900; color:#00897b; margin:3px 0;">01681578599</div>
                 <div style="font-size:12px; color:#b45309; font-weight:800; margin-top:4px;">
-                    ⚠️ আপনার কার্টে খরগোশ/হ্যামস্টার রয়েছে। ৫০% অগ্রিম প্রদেয়: ৳<span id="advanceAmountText">0</span> (সেন্ড মানি করুন)
+                    ⚠️ কার্টে লাইভ পেট রয়েছে। ৫০% অগ্রিম প্রদেয়: ৳<span id="advanceAmountText">0</span> (সেন্ড মানি করুন)
                 </div>
             </div>
 
-            <label style="font-size:12.5px; font-weight:700; color:#475569;">বিকাশ/নগদ ট্রানজেকশন আইডি (TrxID - ঐচ্ছিক)</label>
+            <label style="font-size:12.5px; font-weight:700; color:#475569;">বিকাশ/নগদ ট্রানজেকশন আইডি (TrxID)</label>
             <input type="text" id="trxIdInput" placeholder="যেমন: 9J87H6G5F4" class="form-input">
 
             <!-- ORDER SUMMARY BOX -->
@@ -191,7 +191,6 @@ function updateCheckoutTotal(){
             const price = (p.discountPrice && p.discountPrice > 0 && p.discountPrice < p.price) ? p.discountPrice : p.price;
             subtotal += price * item.qty;
             
-            // খরগোশ বা হ্যামস্টার চেক করা
             const cat = (p.category || '').toLowerCase();
             if(cat.includes('rabbit') || cat.includes('hamster')){
                 hasLivePet = true;
@@ -200,10 +199,10 @@ function updateCheckoutTotal(){
     });
     
     const district = document.getElementById("deliveryDistrict").value;
-    let delivery = 80; // ঢাকা
+    let delivery = 80;
     if(district === "Gazipur" || district === "Narayanganj" || district === "Chattogram" || district === "Sylhet" || district === "Rajshahi" || district === "Khulna" || district === "Barishal" || district === "Rangpur" || district === "Mymensingh") {
         delivery = 120;
-    } else if(district !== "") {
+    } else if(district !== "Dhaka" && district !== "") {
         delivery = 150;
     }
     
@@ -213,7 +212,6 @@ function updateCheckoutTotal(){
     document.getElementById("checkoutDeliveryText").innerText = delivery;
     document.getElementById("checkoutTotalText").innerText = total;
 
-    // শুধুমাত্র কার্টে খরগোশ বা হ্যামস্টার থাকলে ৫০% অ্যাডভান্স পেমেন্ট এর বক্স শো করবে
     const advBox = document.getElementById("advancePaymentBox");
     if(hasLivePet){
         const adv = Math.round(total * 0.5);
